@@ -1,0 +1,149 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:importConstants type="es.caib.meiib.commons.TextConstants"/>
+            <f:viewAction action="#{textController.loadTextSeccio(TextConstants.HOME)}" />
+        </f:metadata>
+    </ui:define>
+
+    <!-- Content of the page -->
+    <ui:define name="content">
+        <script>
+            $(function() { inicializarCopyListeners(); });
+        </script>
+        <div class="row ui-fluid m-2">
+            <div class="col-3">
+                <h:form id="historialChats" styleClass="mt-3 ps-3">
+                    <p:card style="margin-bottom: 2em; height: 100%">
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <p:commandButton value="Nuevo" ajax="true" icon="pi pi-plus" action="#{chatController.newChat()}" styleClass="mr-2 bg-corporatiu" update="agentForm,formGuardar:titulo" />
+                            <p:commandButton value="Guardar" icon="pi pi-save"
+                                             onclick="PF('dlgGuardar').show();"
+                                             type="button"
+                                             styleClass="ui-button-success" />
+                        </div>
+                        <p:dataTable id="historialChats"
+                                     var="chat"
+                                     value="#{chatController.chatsGuardados}"
+                                     rowKey="#{chat.idChat}"
+                                     paginator="false" lazy="false"
+                                     selectionMode="single" size="small"
+                                     scrollable="true"
+                                     scrollHeight="300">
+                            <p:ajax event="rowSelect" listener="#{chatController.onChatSelect}" oncomplete="rehidratarHistorialJS();" update="agentForm,formGuardar:titulo"/>
+                            <p:column headerText="Conversaciones"  style="width:90%">
+                                <h:outputText value="#{chat.titulo}"/>
+                            </p:column>
+                            <p:column style="width:10%; text-align: center">
+                                <p:commandButton icon="pi pi-trash"
+                                                 title="Eliminar conversación"
+                                                 actionListener="#{chatController.deleteChat(chat.idChat)}"
+                                                 update="historialChats"
+                                                 styleClass="rounded-button ui-button-danger ui-button-flat">
+                                    <p:confirm header="Confirmar eliminación"
+                                               message="¿Seguro que deseas eliminar la conversación '#{chat.titulo}'?"
+                                               icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                            <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes ui-button-danger" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                        </p:confirmDialog>
+                    </p:card>
+
+                </h:form>
+            </div>
+
+            <div class="col-7">
+                <h:form id="agentForm">
+                    <div class="chat-wrapper">
+                        <div id="chatHistory" class="chat-history">
+                            <h:panelGroup rendered="#{empty chatController.ollamaChatRequest.messages}">
+                                <div class="ai-bubble">Hola, soy el agente especializado en el MEIIB30. ¿En qué puedo ayudarte?</div>
+                            </h:panelGroup>
+
+                            <ui:repeat value="#{chatController.ollamaChatRequest.messages}" var="msg">
+                                <h:panelGroup rendered="#{msg.role ne 'system'}">
+
+                                    <h:panelGroup rendered="#{msg.role eq 'user'}">
+                                        <div class="user-bubble">
+                                            <h:outputText value="#{msg.content}" />
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{msg.role eq 'assistant'}">
+                                        <div class="ai-bubble unparsed-markdown">
+                                            <h:outputText value="#{msg.content}" escape="true" />
+                                        </div>
+                                    </h:panelGroup>
+
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </div>
+                        <div class="chat-input-container">
+                            <p:inputTextarea id="userPrompt" widgetVar="inputUsuariWidget" rows="1" placeHolder="Pídeme lo que quieras..." autoResize="true" />
+                            <p:commandButton icon="pi pi-send" styleClass="btn-send-chat" type="button" onclick="iniciarChatStreaming(); return false;"/>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+            <div class="col-2">
+                <h:form id="infoAgent" styleClass="mt-3 pe-3">
+                    <p:card style="margin-bottom: 2em">
+                        <f:facet name="title"><b>Parámetros</b></f:facet>
+                        <p>Modelo: #{chatController.agentIA.model}</p>
+                        <p>Ventana contexto: #{chatController.agentIA.numCtx}</p>
+                        <div style="margin-bottom: 15px;">
+                            <h:outputText id="displayTemp" value="Temperatura: #{chatController.agentIA.modelTemperature}" style="display:block; margin-bottom: 10px;" />
+                            <h:inputHidden id="tempInput" value="#{chatController.agentIA.modelTemperature}" />
+                            <p:slider for="tempInput" display="displayTemp" displayTemplate="Temperatura: {value}" minValue="0.0" maxValue="1.0" step="0.1" style="width: 100%;" >
+                                <p:ajax event="slideEnd" process="@this" listener="#{chatController.onTemperaturaChange}" />
+                            </p:slider>
+                        </div>
+                    </p:card>
+                    <p:card style="margin-bottom: 2em">
+                        <f:facet name="title"><b>Funcionalidad</b></f:facet>
+                        <p:selectBooleanCheckbox value="true" disabled="true" itemLabel="RAG"/><br/>
+                        <p:selectBooleanCheckbox value="true" disabled="true" itemLabel="Ámbitos"/><br/>
+                        <p:selectBooleanCheckbox value="true" disabled="true" itemLabel="Municipios"/><br/>
+                        <p:selectBooleanCheckbox value="true" disabled="true" itemLabel="Líneas estratégicas"/><br/>
+                        <p:selectBooleanCheckbox value="true" disabled="true" itemLabel="Fuentes"/><br/>
+                        <p:selectBooleanCheckbox value="true" disabled="true" itemLabel="Programación {fuente}"/><br/>
+                        <p:selectBooleanCheckbox value="true" disabled="true" itemLabel="Actuaciones {municipio, fuente}"/><br/>
+                    </p:card>
+                </h:form>
+            </div>
+        </div>
+
+        <p:dialog header="Guardar Chat" widgetVar="dlgGuardar" modal="true"
+                  resizable="false" showEffect="fade" hideEffect="fade" width="400">
+            <h:form id="formGuardar">
+                <div class="ui-fluid">
+                    <div class="field">
+                        <p:outputLabel for="titulo" value="Título de la conversación" />
+                        <p:inputText id="titulo" value="#{chatController.tituloChat}" required="true" />
+                    </div>
+                </div>
+
+                <div class="flex justify-content-end mt-3">
+                    <p:commandButton value="Guardar" icon="pi pi-check"
+                                     actionListener="#{chatController.saveChat()}"
+                                     update="historialChats"
+                                     oncomplete="if (!args.validationFailed) PF('dlgGuardar').hide();" />
+                    <p:commandButton value="Cancelar" type="button"
+                                     styleClass="ui-button-secondary ui-button-flat mr-2"
+                                     onclick="PF('dlgGuardar').hide();" />
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+    <!-- end: Content -->
+</ui:composition>

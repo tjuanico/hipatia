@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      lang="#{userLocale.current.toLanguageTag()}">
+<!--
+Plantilla.
+-->
+<f:view locale="#{userLocale.current}">
+    <!-- Espai perquè les pàgines que emprin el template defineixin els seus viewParam i viewAction -->
+    <ui:insert name="metadata"/>
+    <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="author" content="MEIIB" />
+        <meta name="description" content="MEIIB30 - Error"/>
+        <link rel="icon" type="image/png" href="#{resource['images/favicon.png']}"/>
+        <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+        <h:outputStylesheet name="css/plugins.css" />
+        <h:outputStylesheet name="css/uape-style.css" />
+        <title>MEIIB30 - Error</title>
+    </h:head>
+
+    <h:body>
+        <!-- Body Inner -->
+        <div class="body-inner">
+            <!-- Topbar -->
+            <div id="topbar" class="topbar-fullwidth">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="top-menu">
+                                <li><a href="#"><h4>MEIIB30</h4></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end: Topbar -->
+
+            <!-- Header -->
+            <header id="header" data-fullwidth="true">
+                <div class="header-inner">
+                    <div class="container">
+                        <!--Logo-->
+                        <!--div id="logo">
+                            <h:link outcome="/index.xhtml">
+                                <h:graphicImage name="images/logo-govern.png" class="logo-default" alt="Govern de les Illes Balears"/>
+                            </h:link>
+                        </div-->
+                        <!--End: Logo-->
+                    </div>
+                </div>
+            </header>
+            <!-- end: Header -->
+
+            <!-- Content -->
+            <ui:insert name="content"/>
+            <!-- end: Content-->
+
+            <!-- Footer -->
+            <footer id="footer" class="inverted">
+                <div class="footer-content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="widget">
+                                    <div class="widget-title">
+                                        <a href="#">
+                                            <h:graphicImage name="images/logo-conselleria.png"  width="250px" alt="Direcció General de Projectes Estratègics, Fons Europeus i Simplificació Administrativa" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <div class="widget widget-title">
+                                            <p class="mb-5">c/ del Palau Reial, 17<br/>07001 Palma</p>
+                                        </div>
+                                        <!-- Social icons -->
+                                        <div class="social-icons social-icons-large social-icons">
+                                            <ul>
+                                                <li class="social-facebook"><a href="#"><i class="fab fa-facebook-f"/></a></li>
+                                                <li class="social-twitter"><a href="#"><i class="fab fa-twitter"/></a></li>
+                                                <li class="social-youtube"><a href="#"><i class="fab fa-youtube"/></a></li>
+                                                <li class="social-intagram"><a href="#"><i class="fab fa-instagram"/></a></li>
+                                            </ul>
+                                        </div>
+                                        <!-- end: Social icons -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="copyright-content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="copyright-text text-center">&#169; GOVERN DE LES ILLES BALEARS</div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="copyright-text text-center"><a href="#" style="color:black;">#{text['contacte']}</a></div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="copyright-text text-center"><a href="#" style="color:black;">#{text['avisLegal']}</a></div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="copyright-text text-center"><a href="#" style="color:black;">#{text['mapaWeb']}</a></div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="copyright-text text-center"><a href="accessibilitat.xhtml" style="color:black;">#{text['accessibilitat']}</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- end: Footer -->
+        </div>
+        <!-- end: Body Inner -->
+
+        <!-- Scroll top -->
+        <a id="scrollTop"><i class="icon-chevron-up"/><i class="icon-chevron-up"/></a>
+        <!--Plugins-->
+        <h:outputScript name="js/jquery.js" />
+        <h:outputScript name="js/plugins.js" />
+        <!--Template functions-->
+        <h:outputScript name="js/functions.js" />
+
+        <!--Elements per feedback a l'usuari-->
+        <h:form id="messages">
+            <p:growl id="infoGrowl"
+                     globalOnly="true"
+                     showDetail="true"
+                     life="15000"
+                     escape="false">
+                <p:autoUpdate />
+            </p:growl>
+            <p:growl id="fixedGrowl"
+                     for="fixedGrowl"
+                     showDetail="true"
+                     sticky="true"
+                     escape="false">
+                <p:autoUpdate />
+            </p:growl>
+        </h:form>
+
+        <h:form>
+            <p:confirmDialog global="true" responsive="true" closeOnEscape="true">
+                <p:commandButton value="#{text['No']}" type="button" icon="pi pi-times"
+                                 styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="#{text['Si']}" type="button" icon="pi pi-check"
+                                 styleClass="ui-confirmdialog-yes ui-button-success"/>
+            </p:confirmDialog>
+        </h:form>
+
+        <!--Mostrar una roda de carrega quan es fan peticions ajax, per donar feedback discret a l'usuari-->
+        <p:ajaxStatus onstart="$('html').addClass('loading')" oncomplete="$('html').removeClass('loading')"/>
+
+        <!--Monitor per mostrar una roda de carrega mentres llegeix els autoprohibits de BD en pitjar l'export-->
+        <p:dialog widgetVar="spinnerDialog" modal="true" draggable="false" closable="false" resizable="false"
+                  showHeader="false" styleClass="spinner">
+            <div class="text-center">
+                <i class="pi pi-spin pi-spinner loading-icon" aria-hidden="true"/>
+            </div>
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,43 @@
+<ui:composition template="/WEB-INF/templates/errorLayout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <!--
+    Pàgina d'error de Primefaces.
+    Veure https://primefaces.github.io/primefaces/7_0/#/core/errorhandling?id=exception-information
+    TODO: en producció s'hauria d'eliminar mostrar la traça completa
+    -->
+    <ui:define name="content">
+        <section id="page-title" class="text-light background-theme">
+            <div class="container">
+                <div class="page-title">
+                    <h1><strong>#{text['error.exception.title']}</strong></h1>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-content" style="padding: 5px 0 40px 0;">
+            <div class="container">
+                <div class="text">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="card-text mb-5 lh15">
+                                <h:outputFormat value="#{text['error.exception.desc']}">
+                                    <f:param value="#{pfExceptionHandler.exception.getLocalizedMessage(userLocale.current)}" />
+                                </h:outputFormat>
+                            </p>
+                            <!-- Descomentar per mostrar tot l'stackTrace de l'excepció -->
+                            <!--
+                            <pre>
+                                <h:outputText value="#{pfExceptionHandler.formattedStackTrace}" escape="false"/>
+                            </pre>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>

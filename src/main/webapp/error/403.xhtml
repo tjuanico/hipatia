@@ -1,0 +1,34 @@
+<ui:composition template="/WEB-INF/templates/errorLayout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <!--
+    Pàgina d'error 403 NO AUTORITZAT
+    Els atributs disponibles defnits al request són els definits a 10.9.1 de l'especificació del Servlets
+    -->
+    <ui:define name="content">
+        <section id="page-title" class="text-light background-theme">
+            <div class="container">
+                <div class="page-title">
+                    <h1><strong>#{text['error.403.title']}</strong></h1>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-content" style="padding: 5px 0 40px 0;">
+            <div class="container">
+                <div class="text">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="card-text mb-5 lh15">
+                                #{text['error.403.desc.general']}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>

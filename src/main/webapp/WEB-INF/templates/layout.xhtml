@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      lang="#{userLocale.current.toLanguageTag()}">
+<!-- Plantilla. -->
+<f:view locale="#{userLocale.current}">
+
+    <ui:insert name="metadata"/> <!-- Espai perquè les pàgines que emprin el template defineixin els seus viewParam i viewAction -->
+    <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="author" content="MEIIB" />
+        <meta name="description" content="#{text['uape.title']}"/>
+        <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+        <link rel="icon" type="image/png" href="#{resource['images/favicon.png']}"/>
+
+        <h:outputStylesheet name="css/plugins.css" />
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputStylesheet name="css/chat-style.css" />
+
+        <h:outputScript name="js/plugins.js" />
+        <h:outputScript name="js/functions.js" />
+        <h:outputScript name="js/marked.min.js" />
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+        <h:outputScript name="js/chatStream.js" target="body" />
+
+
+        <title>#{text['llm.title']}</title>
+
+    </h:head>
+
+    <h:body>
+        <div class="body-inner">
+            <ui:include src="/WEB-INF/includes/header.xhtml"/>
+            <ui:insert name="content"/>
+            <ui:include src="/WEB-INF/includes/footer.xhtml"/>
+        </div>
+        <a id="scrollTop"><i class="icon-chevron-up"/><i class="icon-chevron-up"/></a>
+        <!--Elements per feedback a l'usuari-->
+        <h:form id="messages">
+            <p:growl id="infoGrowl"
+                     globalOnly="true"
+                     showDetail="true"
+                     life="15000"
+                     escape="false">
+                <p:autoUpdate />
+            </p:growl>
+            <p:growl id="fixedGrowl"
+                     for="fixedGrowl"
+                     showDetail="true"
+                     sticky="true"
+                     escape="false">
+                <p:autoUpdate />
+            </p:growl>
+        </h:form>
+
+        <h:form>
+            <p:confirmDialog global="true" responsive="true" closeOnEscape="true">
+                <p:commandButton value="#{text['No']}" type="button" icon="pi pi-times"
+                                 styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="#{text['Si']}" type="button" icon="pi pi-check"
+                                 styleClass="ui-confirmdialog-yes ui-button-success"/>
+            </p:confirmDialog>
+        </h:form>
+
+        <!--Mostrar una roda de carrega quan es fan peticions ajax, per donar feedback discret a l'usuari-->
+        <p:ajaxStatus onstart="$('html').addClass('loading')" oncomplete="$('html').removeClass('loading')"/>
+
+        <!--Monitor per mostrar una roda de carrega mentres llegeix elements BD en pitjar l'export-->
+        <p:dialog widgetVar="spinnerDialog" modal="true" draggable="false" closable="false" resizable="false"
+                  showHeader="false" styleClass="spinner">
+            <div class="text-center">
+                <i class="pi pi-spin pi-spinner loading-icon" aria-hidden="true"/>
+            </div>
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>es.caib.meiib</groupId>
+        <artifactId>meiib</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>meiib-front</artifactId>
+    <packaging>war</packaging>
+    <name>meiib - FRONT</name>
+    <description>Front de meiib</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>es.caib.meiib</groupId>
+            <artifactId>meiib-commons</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>es.caib.meiib</groupId>
+            <artifactId>meiib-service</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Especificacions i llibreries proporcionades per JBoss -->
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-8.0</artifactId>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--per llegir configuracions del fitxer .properties al servidor-->
+        <dependency>
+            <groupId>org.eclipse.microprofile.config</groupId>
+            <artifactId>microprofile-config-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Les llibreries de primefaces les necessitam incloure dins el WAR -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+        </dependency>
+        <!-- Llibreries per emprar l'api de LoginIB.  -->
+        <dependency>
+            <groupId>es.caib.loginib</groupId>
+            <artifactId>loginib-rest-api</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <!--aplicar el filtering per que faci les substitucions de claus als fitxers web.xml i on falti-->
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

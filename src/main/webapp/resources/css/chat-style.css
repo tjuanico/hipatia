@@ -1,0 +1,198 @@
+/* chat-style.css */
+
+.chat-wrapper {
+    max-width: 1200px;
+    margin: 15px auto !important;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 225px);
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #ffffff;
+}
+
+.ai-bubble, .user-bubble {
+    font-size: 1.15rem !important;
+    line-height: 1.6;
+    max-width: 85%;
+    padding: 15px 20px;
+    word-wrap: break-word;
+}
+
+
+.ai-bubble {
+    align-self: flex-start;
+    /*background-color: #f1f3f9;*/
+    color: #2c3e50;
+    /*border-radius: 18px 18px 18px 4px;*/
+}
+
+.ai-bubble p {
+    margin-bottom: 12px;
+}
+
+.ai-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.ai-bubble ul, .ai-bubble ol {
+    margin-left: 25px;
+    margin-bottom: 10px;
+}
+
+.ai-bubble li {
+    margin-bottom: 5px;
+}
+
+.ai-bubble strong {
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.ai-bubble code {
+    background-color: rgba(0,0,0,0.05);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.95rem;
+}
+.user-bubble {
+    align-self: flex-end;
+    background-color: #4e73df;
+    color: white;
+    border-radius: 18px 18px 4px 18px;
+}
+
+.chat-input-container {
+    padding: 20px;
+    background: #fff;
+    border-top: 1px solid #f0f2f5;
+    position: relative;
+}
+
+.chat-input-container .ui-inputtextarea {
+    width: 100% !important;
+    padding: 14px 60px 14px 20px !important;
+    border-radius: 28px !important;
+    border: 1px solid #e0e0e0 !important;
+    background-color: #f8f9fa !important;
+    resize: none !important;
+    transition: all 0.2s;
+}
+
+.btn-send-chat {
+    position: absolute !important;
+    right: 25px !important;
+    bottom: 22px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    background-color: #007bff !important;
+    border: none !important;
+    padding: 0 !important;
+    /* Elimina display:flex del contenedor */
+}
+
+.btn-send-chat .ui-button-icon-left {
+    position: absolute !important;   /* absoluto respecto al botón */
+    top: 50% !important;
+    left: 50% !important;
+    /*transform: translate(-50%, -50%) !important;*/  /* centrado perfecto */
+    transform: translate(calc(-50% - 1px), calc(-50% + 2px)) !important;
+    margin: 0 !important;
+    font-size: 1.4rem !important;
+}
+
+/* Animación de los puntos de escritura */
+.typing {
+    display: flex;
+    align-items: center;
+    height: 30px;
+}
+
+.typing span {
+    content: '';
+    height: 8px;
+    width: 8px;
+    margin: 0 2px;
+    background-color: #939598;
+    border-radius: 50%;
+    display: inline-block;
+    animation: bounce 1.3s infinite ease-in-out;
+}
+
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1.0); }
+}
+
+.fetching {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* El perro se mueve ligeramente de arriba a abajo (olfateando) */
+.dog {
+    font-size: 20px;
+    display: inline-block;
+    margin-right: 15px;
+    animation: sniff 0.8s infinite alternate;
+}
+
+.dots-container {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: #939598;
+    border-radius: 50%;
+    opacity: 0;
+    animation: track 1.5s infinite;
+}
+
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+.dot:nth-child(4) { animation-delay: 0.6s; }
+
+@keyframes sniff {
+    from { transform: translateX(0); }
+    to { transform: translateX(15px); }
+}
+
+@keyframes track {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.chart-title {
+    margin: 0 auto;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: black;
+    text-align: center;
+    flex: 1;  /* ocupa el espacio central empujando el botón a la derecha */
+}
+
+.chart-header {
+    display: flex;
+    align-items: center;
+    padding: 0 8px 8px 8px;
+}
